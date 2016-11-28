@@ -25,25 +25,31 @@ var config = {
 
 var fb = firebase.database().ref();
 
-
-fb.auth.signInWithCustomToken(PiLab.config.firebaseKey, function(error) {
-  if(error) {
-    console.error('[FIREBASE] Auth failed. ' + error.toString());
-    window.showErrorToast('Firebase authentication failure.');
-  } else {
-    console.log('[FIREBASE] Auth success.');
-    fb.child('.info/connected').on('value', function(snapshot) {
-      if (snapshot.val() === true) {
-        window.showToast('Firebase connected.');
-      } else {
-        window.showErrorToast('Network disconnected.');
-      }
-    });
-    fb.child('config/useMode').on('value', function(snapshot) {
-      PiLabMode = snapshot.val();
-    });
-  }
-});
+var provider = new firebase.auth.GoogleAuthProvider();
+firebase.auth().signInWithPopup(provider).then(function(result) {
+ // This gives you a Google Access Token. You can use it to access the Google API.
+ var token = result.credential.accessToken;
+ console.log('Firebase authentication success! ', user, token);
+ var user = result.user;
+});]
+// fb.auth.signInWithCustomToken(PiLab.config.firebaseKey, function(error) {
+//   if(error) {
+//     console.error('[FIREBASE] Auth failed. ' + error.toString());
+//     window.showErrorToast('Firebase authentication failure.');
+//   } else {
+//     console.log('[FIREBASE] Auth success.');
+//     fb.child('.info/connected').on('value', function(snapshot) {
+//       if (snapshot.val() === true) {
+//         window.showToast('Firebase connected.');
+//       } else {
+//         window.showErrorToast('Network disconnected.');
+//       }
+//     });
+//     fb.child('config/useMode').on('value', function(snapshot) {
+//       PiLabMode = snapshot.val();
+//     });
+//   }
+// });
 
 
 // firebase.auth().signInWithCustomToken(customToken).catch(function(error) {
